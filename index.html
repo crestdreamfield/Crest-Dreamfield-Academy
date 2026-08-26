@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crest Dreamfield Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-cream: #FAF9F5;
+            --navy-dark: #0A192F;
+            --navy-card: #0D223D;
+            --accent-gold: #E5A93B;
+            --accent-blue: #3498DB;
+            --text-dark: #1F2937;
+            --white: #FFFFFF;
+            --shadow: 0 10px 25px rgba(0,0,0,0.08);
+            --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .handwritten {
+            font-family: 'Kalam', cursive;
+        }
+
+        /* NAVIGATION BAR */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--navy-dark);
+            color: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 6%;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--white);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .logo-img-frame {
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            border: 2px solid var(--accent-gold);
+            background: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-img-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent-gold);
+        }
+
+        /* SECTIONS GENERAL */
+        .page-section {
+            display: none;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+
+        .page-section.active-page {
+            display: block;
+        }
+
+        /* HERO BANNER */
+        .hero-banner-container {
+            background-color: var(--navy-dark);
+            padding: 3rem 6% 4rem;
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            min-height: calc(100vh - 140px);
+        }
+
+        .hero-logo-side {
+            flex: 0 0 320px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-large-frame {
+            width: 280px;
+            height: 320px;
+            border-radius: 16px;
+            border: 2px dashed rgba(229, 169, 59, 0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-gold);
+            text-align: center;
+            padding: 1.5rem;
+            background: #FFFFFF;
+            overflow: hidden;
+        }
+
+        .logo-large-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .hero-frame-side {
+            flex: 1;
+            border: 4px solid var(--accent-gold);
+            border-radius: 8px;
+            padding: 4rem 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: var(--navy-dark);
+            box-shadow: 0 0 30px rgba(229, 169, 59, 0.15);
+        }
+
+        .hero-title {
+            color: var(--white);
+            font-size: 3.8rem;
+            line-height: 1.15;
+            font-weight: 800;
+        }
+
+        .cta-sub-bar {
+            background-color: var(--navy-dark);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 1.2rem;
+            text-align: center;
+        }
+
+        .btn-banner {
+            display: inline-block;
+            background: transparent;
+            color: var(--white);
+            border: 1px solid var(--white);
+            padding: 0.75rem 3rem;
+            border-radius: 4px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .btn-banner:hover {
+            background: var(--white);
+            color: var(--navy-dark);
+        }
+
+        .btn-gold {
+            background-color: var(--accent-gold);
+            color: var(--navy-dark);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(229, 169, 59, 0.3);
+        }
+
+        .btn-gold:disabled {
+            background-color: #CBD5E1;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .section-padding {
+            padding: 5rem 8%;
+        }
+
+        .welcome-box {
+            text-align: center;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .welcome-box h2 {
+            font-size: 2.5rem;
+            color: var(--navy-dark);
+            margin-bottom: 1rem;
+        }
+
+        /* ELLIE SECTION */
+        .ellie-section {
+            background: var(--white);
+            border-radius: 16px;
+            margin: 0 6%;
+            padding: 3.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0,0,0,0.05);
+            gap: 2rem;
+        }
+
+        .ellie-dialogue-box {
+            max-width: 550px;
+        }
+
+        .ellie-dialogue-box h2 {
+            font-size: 2.2rem;
+            color: var(--navy-dark);
+            margin-bottom: 1rem;
+        }
+
+        .typewriter-text {
+            font-size: 1.6rem;
+            color: var(--accent-gold);
+            min-height: 70px;
+            margin-bottom: 1rem;
+        }
+
+        .ellie-img-frame {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 3px dashed var(--accent-gold);
+            background: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #718096;
+            font-weight: 600;
+            text-align: center;
+            padding: 0;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .ellie-img-frame img {
+            width: 118%;
+            height: 118%;
+            object-fit: contain;
+            object-position: center;
+            transform: scale(1.08);
+        }
+
+        /* CARDS & FRAMES GRID */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .storybook-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-top: 4px solid var(--accent-gold);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .storybook-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+        }
+
+        .program-poster-frame {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1414 / 2000;
+            background: #F1F5F9;
+            border: 2px dashed #CBD5E1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748B;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            overflow: hidden;
+        }
+
+        .program-poster-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .photo-frame-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .image-placeholder-frame {
+            width: 100%;
+            height: 240px;
+            background: #F1F5F9;
+            border: 2px dashed #CBD5E1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748B;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .image-placeholder-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* HOME POSTS CMS */
+        .home-posts-section{padding:4rem 6%}.home-posts-heading{text-align:center;max-width:760px;margin:0 auto 2rem}.home-posts-heading h2{color:var(--navy-dark);font-size:2.5rem}.home-posts-heading p{color:#64748B}.home-posts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.5rem}.home-post-card{background:var(--white);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);border-top:4px solid var(--accent-gold);display:flex;flex-direction:column}.home-post-card.featured{grid-column:1/-1;border-top-color:var(--accent-blue)}.home-post-card-body{padding:1.5rem;display:flex;flex-direction:column;flex:1}.home-post-type{color:var(--accent-blue);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.home-post-date{color:#64748B;font-size:.82rem;margin:.35rem 0 .8rem}.home-post-card h3{color:var(--navy-dark);font-size:1.35rem}.home-post-card p{white-space:pre-line}.home-post-media{width:100%;background:#F8FAFC;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:1rem}.home-post-media img{display:block;width:100%;height:auto;max-height:460px;object-fit:contain;object-position:center}.home-post-card.featured .home-post-media img{max-height:620px}.home-post-media iframe{width:100%;min-height:270px;border:0}.home-post-card-actions{margin-top:auto;padding-top:1.25rem}.home-post-empty,.home-post-loading{text-align:center;color:#64748B;padding:2rem;background:rgba(255,255,255,.65);border-radius:12px}@media(max-width:900px){.home-posts-section{padding:3rem 4%}.home-post-card.featured{grid-column:auto}}
+
+        /* GENERAL POSTER BANNER */
+        .poster-section-container {
+            background: var(--navy-dark);
+            color: var(--white);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .poster-frame {
+            flex: 0 0 320px;
+            height: auto;
+            aspect-ratio: 1414 / 2000;
+            background: #1E293B;
+            border: 2px dashed var(--accent-gold);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-gold);
+            text-align: center;
+            padding: 1rem;
+            overflow: hidden;
+        }
+
+        .poster-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .poster-content-side {
+            flex: 1;
+        }
+
+        /* PORTAL & DASHBOARD */
+        .portal-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .login-card {
+            max-width: 420px;
+            margin: 2rem auto;
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--navy-dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            border: 1px solid #CBD5E1;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .dashboard-header {
+            background: var(--navy-dark);
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .student-profile-info {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .student-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-gold);
+            background: #1E293B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--accent-gold);
+            font-size: 1.4rem;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .student-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .journal-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .journal-img-frame {
+            width: 100%;
+            min-height: 220px;
+            height: auto;
+            max-height: 640px;
+            background: #F8FAFC;
+            border-radius: 8px;
+            margin: 1rem 0;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748B;
+            font-size: 0.9rem;
+            border: 2px dashed #CBD5E1;
+            overflow: hidden;
+        }
+
+        .journal-img-frame img {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 600px;
+            object-fit: contain;
+            object-position: center;
+        }
+
+        @media(max-width: 600px) {
+            .journal-img-frame { min-height: 180px; max-height: 520px; padding: .75rem; }
+            .journal-img-frame img { max-height: 480px; }
+        }
+
+        .feedback-box {
+            background: #FAF5FF;
+            border-left: 4px solid #9333EA;
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .badge-list {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .badge-item {
+            background: #FEF3C7;
+            color: #92400E;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        /* FAQ ACCORDION */
+        .faq-container {
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+
+        .faq-item {
+            background: var(--white);
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .faq-question {
+            padding: 1.25rem 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            color: var(--navy-dark);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem 1.25rem;
+            color: #4B5563;
+            display: none;
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: var(--navy-dark);
+            color: var(--white);
+            padding: 3rem 6% 2rem;
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        @media(max-width: 900px) {
+            .hero-banner-container { flex-direction: column; padding: 2rem 4%; }
+            .hero-logo-side { flex: none; }
+            .hero-title { font-size: 2.5rem; }
+            .ellie-section { flex-direction: column; text-align: center; }
+            .poster-section-container { flex-direction: column; text-align: center; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            nav ul { gap: 1rem; }
+        }
+
+        /* PROGRAM MODAL */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 25, 47, 0.9);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .modal-content {
+            background: var(--bg-cream);
+            width: 100%;
+            max-width: 900px;
+            max-height: calc(100vh - 4rem);
+            max-height: calc(100dvh - 4rem);
+            border-radius: 16px;
+            padding: 2.5rem;
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .modal-close {
+            position: sticky;
+            top: 0;
+            z-index: 3;
+            display: block;
+            width: fit-content;
+            margin: -1rem -1rem -2.5rem auto;
+            padding: 0.25rem 0.6rem;
+            border-radius: 8px;
+            background: var(--bg-cream);
+            font-size: 2rem;
+            line-height: 1;
+            cursor: pointer;
+            color: var(--navy-dark);
+            transition: var(--transition);
+        }
+
+        @media(max-width: 600px) {
+            .modal-overlay { padding: 0.75rem; }
+            .modal-content {
+                max-height: calc(100vh - 1.5rem);
+                max-height: calc(100dvh - 1.5rem);
+                padding: 1.25rem;
+                border-radius: 12px;
+            }
+            .modal-close { margin: -0.25rem -0.25rem -1.25rem auto; }
+        }
+
+        .modal-close:hover { color: var(--accent-gold); }
+
+        .modal-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .gallery-item {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .video-container {
+            width: 100%;
+            margin-top: 1.5rem;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .video-container video { width: 100%; display: block; }
+
+        .memory-text {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-gold);
+            margin-top: 1.5rem;
+            font-style: italic;
+        }
+
+        .clickable-card { cursor: pointer; }
+        .clickable-card:hover { border-top-color: var(--accent-blue); }
+        .locked-card { opacity: 0.8; cursor: not-allowed; }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION BAR -->
+    <header>
+        <a class="nav-logo" onclick="switchPage('home')">
+            <div class="logo-img-frame">
+                <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663542924436/RLhucIRLGkhDHWvM.png" alt="Logo">
+            </div>
+            Crest Dreamfield Academy
+        </a>
+        <nav>
+            <ul>
+                <li><a onclick="switchPage('home')" class="active" id="nav-home">Home</a></li>
+                <li><a onclick="switchPage('programs')" id="nav-programs">Program</a></li>
+                <li><a onclick="switchPage('about')" id="nav-about">About Us</a></li>
+                <li><a onclick="switchPage('faq')" id="nav-faq">FAQ</a></li>
+                <li><a onclick="switchPage('portal')" id="nav-portal">Student Portal</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HOME PAGE -->
+    <section id="home" class="page-section active-page">
+        <!-- Hero Banner -->
+        <div class="hero-banner-container">
+            <div class="hero-logo-side">
+                <div class="logo-large-frame">
+                    <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663542924436/RLhucIRLGkhDHWvM.png" alt="Crest Logo">
+                </div>
+            </div>
+            <div class="hero-frame-side">
+                <h1 class="hero-title">Where learning begins with wonder</h1>
+            </div>
+        </div>
+        <div class="cta-sub-bar">
+            <div style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;"><a class="btn-banner" href="https://www.facebook.com/share/1DHJ9hW5NV/" target="_blank" rel="noopener">Visit Our Facebook Page</a><a class="btn-banner" href="https://m.me/crestdreamfieldacademy" target="_blank" rel="noopener">Message Us on Messenger</a></div>
+        </div>
+
+        <!-- Welcome Section -->
+        <div class="section-padding welcome-box">
+            <h2>Welcome to Crest Dreamfield Academy</h2>
+            <p>A place where children discover, imagine, explore, and grow through meaningful adventures designed to inspire a lifelong love of learning.</p>
+        </div>
+
+        <!-- Meet Ellie Section -->
+        <div class="ellie-section">
+            <div class="ellie-dialogue-box">
+                <h2>Meet Ellie</h2>
+                <div class="typewriter-text handwritten" id="typewriter">I wonder what adventure we'll have today...</div>
+                <p>Every great adventure begins with curiosity. Join Ellie on daily discoveries!</p>
+                <button class="btn-gold" style="margin-top: 1.5rem;" onclick="switchPage('about')">Meet Ellie &rarr;</button>
+            </div>
+            <div class="ellie-img-frame">
+                <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663542924436/wzPKxitOKNnKsxjA.jpg" alt="Ellie Mascot">
+            </div>
+        </div>
+
+        <!-- Latest Announcements & Adventures -->
+        <section id="home-posts-section" class="home-posts-section" aria-labelledby="home-posts-title">
+            <div class="home-posts-heading"><h2 id="home-posts-title">Latest Announcements &amp; Adventures</h2><p>Fresh stories, updates, and memorable moments from Crest Dreamfield Academy.</p></div>
+            <div id="home-posts-status" class="home-post-loading" role="status">Loading the latest adventures...</div><div id="home-posts-grid" class="home-posts-grid" aria-live="polite"></div>
+        </section>
+
+        <!-- Academy Poster Feature Section -->
+        <div class="section-padding">
+            <div class="poster-section-container">
+                <div class="poster-frame">
+                    <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663542924436/ogZpowozjeslldGL.jpg" alt="Academy Poster">
+                </div>
+                <div class="poster-content-side">
+                    <h2 style="color: var(--accent-gold); font-size: 2.2rem; margin-bottom: 1rem;">Adventure awaits at Crest Dreamfield!</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.9;">Crest Dreamfield Academy is operating soon. Our FREE Trial Class Schedule will be announced soon, and we can’t wait to welcome our Little Dreamers!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Teacher Journey Feature Section -->
+        <div class="section-padding">
+            <div class="poster-section-container teacher-feature">
+                <div class="poster-frame">
+                    <img src="https://drive.google.com/thumbnail?id=1WA-XKA8g_NwEkdQkLXF8DecWEykdAS7S&sz=w1200" alt="Teacher journey feature poster" loading="lazy">
+                </div>
+                <div class="poster-content-side">
+                    <h2 style="color: var(--accent-gold); font-size: 2.2rem; margin-bottom: 1rem;">The Heart Behind Every Wonder-Filled Day</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 1rem;">Behind every wonder-filled day at Crest Dreamfield Academy is a teacher whose journey has touched young learners across international schools abroad.</p>
+                    <p style="font-size: 1.1rem; opacity: 0.9;">Learning begins with wonder—and with educators whose hearts, experience, and passion truly understand childhood.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROGRAMS PAGE -->
+    <section id="programs" class="page-section">
+        <div class="section-padding">
+            <h2 style="text-align: center; color: var(--navy-dark); font-size: 2.5rem;">Our Learning Programs</h2>
+            <p style="text-align: center; color: #64748B; margin-bottom: 2rem;">Explore our customized learning adventures below</p>
+            
+            <div class="cards-grid" id="programs-container">
+                <!-- Programs will be loaded here from Google Sheets -->
+                <p style="text-align: center; grid-column: 1/-1;">Loading programs...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT US PAGE -->
+    <section id="about" class="page-section">
+        <div class="section-padding">
+            <div class="welcome-box" style="margin-bottom: 4rem;">
+                <h2>About Crest Dreamfield Academy</h2>
+                <p>Founded as an online tutorial center, Crest Dreamfield Academy grew into an offline sanctuary built on storybook-inspired learning. We are dedicated to creating a nurturing environment where curiosity is celebrated and every child feels safe to explore, imagine, and grow.</p>
+            </div>
+
+            <!-- Founders Section -->
+            <div id="founders-section" style="display: none;">
+                <h2 style="text-align: center; color: var(--navy-dark); font-size: 2.2rem; margin-bottom: 1.5rem;">Meet Our Founders</h2>
+                <div class="cards-grid" id="founders-container" style="max-width: 800px; margin: 0 auto 5rem;"></div>
+            </div>
+
+            <!-- Teachers Section -->
+            <div id="teachers-section" style="display: none;">
+                <h2 style="text-align: center; color: var(--navy-dark); font-size: 2.2rem; margin-bottom: 1.5rem;">Our Teachers</h2>
+                <div class="cards-grid" id="teachers-container"></div>
+            </div>
+
+            <!-- Academic and Administrative Staff Section -->
+            <div id="staff-section" style="display: none;">
+                <h2 style="text-align: center; color: var(--navy-dark); font-size: 2.2rem; margin: 4rem 0 1.5rem;">Academic &amp; Administrative Staff</h2>
+                <div class="cards-grid" id="staff-container"></div>
+            </div>
+            <div id="about-loading" style="text-align: center; padding: 2rem;">Loading team...</div>
+        </div>
+    </section>
+
+    <!-- FAQ PAGE -->
+    <section id="faq" class="page-section">
+        <div class="section-padding">
+            <h2 style="text-align: center; color: var(--navy-dark); font-size: 2.5rem;">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">What ages do you accept? <span>+</span></div><div class="faq-answer">We welcome learners from <strong>1 to 16 years old</strong>, with programs designed to meet different developmental stages and learning needs.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">How do I enroll my child? <span>+</span></div><div class="faq-answer">Send us a message through Facebook Messenger or email to request enrollment guidance and the current requirements.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">What programs are available? <span>+</span></div><div class="faq-answer">We currently offer:<br><br>• Wonder &amp; Play (Ages 1–16)<br>• Crest Tutorials<br>• Stay &amp; Play (Child Care Services)<br><br>Visit our Programs page to learn more about each program.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">How much is tuition? <span>+</span></div><div class="faq-answer">For current tuition rates, enrollment fees, and other payment details, please message Crest Dreamfield Academy using the Message Us on Messenger button on our homepage. Our team will be happy to provide the latest tuition information and assist you with enrollment.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">When will the Academy open? <span>+</span></div><div class="faq-answer">Our soft opening was held on August 22, 2026, and enrollment is now open. Regular classes will officially begin on September 1, 2026.<br><br>We are excited to welcome our Little Dreamers and begin this wonderful learning adventure together!</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">Are late enrollees accepted? <span>+</span></div><div class="faq-answer">Yes! Late enrollment is accepted and we encourage families who are interested to join us even after the program has started.<br><br>For late enrollees, the applicable fees will cover the month they join through the end of the program. Please note that these payments are non-refundable. All payment terms, conditions, and other important details are outlined in the enrollment contract.<br><br>For example, if a learner enrolls during the second week of September, they will still need to pay the applicable fee for the entire month of September. Alternatively, they may choose to wait and begin with the October class.<br><br>If you would like to join early but are not yet ready to officially commit as a member, you may also register as a Non-Member. You can participate by paying the applicable Non-Member fee and eventually enroll as a regular member in the exact month you wish to begin your membership.<br><br>For specific enrollment and payment details, please message the Academy through the Message Us on Messenger button on the homepage.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">Can I enroll as a Non-Member? <span>+</span></div><div class="faq-answer">Yes! You may sign up as a Non-Member if you are interested in joining our learning activities but are not yet ready to commit to the full program.<br><br>Non-Members are welcome to participate; however, Non-Member fees and charges are different from Member rates.<br><br>If you are considering becoming a member later, you may eventually enroll as a Member in the exact month you wish to officially begin your membership.<br><br>For current Non-Member rates, available activities, and other details, please message Crest Dreamfield Academy using the Message Us on Messenger button on the homepage.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">When will the FREE Trial Class Schedule be announced? <span>+</span></div><div class="faq-answer">The FREE Trial Class Schedule will be announced soon. Please follow our Facebook page or contact us for updates.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">How do I book a trial class? <span>+</span></div><div class="faq-answer">You can register for a FREE trial class through our <a href="https://crestdreamfield.github.io/wonder-play-form/" target="_blank" rel="noopener">online registration form</a>.<br><br>After submitting the form, our team will contact you to confirm your preferred schedule and provide the next steps.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">What is the Student Portal? <span>+</span></div><div class="faq-answer">The Student Portal is a private area where enrolled students can view their profile, attendance, badges, journal entries, and teacher feedback.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">How do students log in to the portal? <span>+</span></div><div class="faq-answer">Use the username and password provided by the Academy. If your credentials do not work, contact the Academy instead of sharing them publicly.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">Can parents access the Student Portal? <span>+</span></div><div class="faq-answer">Parents or guardians may request access details from the Academy. Do not share student passwords in public messages.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">How is attendance displayed? <span>+</span></div><div class="faq-answer">After login, the dashboard displays the attendance percentage and any session summary supplied by the Academy records.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">Where can I see my child’s journal entries? <span>+</span></div><div class="faq-answer">Journal entries appear on the dashboard after login, showing dates, summaries, photos when available, and teacher feedback. The journal is updated regularly and may reset as new physical journal entries are collected, keeping only the latest learning moments visible.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">Where can I see badges? <span>+</span></div><div class="faq-answer">Badges assigned to the student appear in the My Badges panel on the dashboard.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">Where can I find class schedules? <span>+</span></div><div class="faq-answer">Schedules will be communicated by the Academy through the official contact channels and updated announcements.</div></div>
+                <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">How can I contact Crest Dreamfield Academy? <span>+</span></div><div class="faq-answer">Use the Message Us on Facebook button to contact the Academy for assistance.</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STUDENT PORTAL PAGE -->
+    <section id="portal" class="page-section">
+        <div class="section-padding">
+            <!-- LOGIN VIEW -->
+            <div id="login-view" class="portal-container">
+                <div class="login-card">
+                    <h2 style="text-align: center; color: var(--navy-dark); margin-bottom: 0.5rem;">Student Portal</h2>
+                    <p style="text-align: center; color: #64748B; font-size: 0.9rem; margin-bottom: 1.5rem;">Log in to access your Adventure Journal</p>
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label>Student Username</label>
+                            <input type="text" id="username" placeholder="Enter username" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="password" placeholder="Enter password" required>
+                        </div>
+                        <p id="login-error" style="color: #DC2626; font-size: 0.85rem; display: none; margin-bottom: 1rem;">Invalid credentials. Please try again.</p>
+                        <button type="submit" id="login-btn" class="btn-gold" style="width: 100%;">Open Journal</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- LOGGED IN DASHBOARD VIEW -->
+            <div id="dashboard-view" class="portal-container" style="display: none;">
+                <div class="dashboard-header">
+                    <div class="student-profile-info">
+                        <div class="student-avatar">
+                            <img id="student-avatar-image" alt="Student profile picture" hidden><span id="student-avatar-char">A</span>
+                        </div>
+                        <div>
+                            <h2 id="student-welcome-name" style="color: var(--white);">Welcome back, Alex!</h2>
+                            <p id="student-program-level" style="color: var(--accent-gold); font-weight: 600;">Little Dreamer | Wonder & Play</p>
+                        </div>
+                    </div>
+                    <button class="btn-banner" style="padding: 0.5rem 1.5rem;" onclick="handleLogout()">Logout</button>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="journal-feed" id="journal-feed">
+                        <h3 style="margin-bottom: 1rem; color: var(--navy-dark);">My Adventure Journal</h3>
+                        <!-- Dynamic Journal Entries will be injected here -->
+                    </div>
+
+                    <div class="badges-sidebar">
+                        <div class="journal-card">
+                            <h3 style="margin-bottom: 1rem; color: var(--navy-dark);">My Badges</h3>
+                            <div class="badge-list" id="badge-list">
+                                <!-- Dynamic Badges will be injected here -->
+                            </div>
+                        </div>
+                        
+                        <div class="journal-card" id="attendance-card">
+                            <h3 style="margin-bottom: 1rem; color: var(--navy-dark);">Attendance</h3>
+                            <p id="attendance-stats" style="font-weight: 700; color: var(--accent-gold); font-size: 1.2rem;"></p>
+                            <p id="attendance-sessions" style="font-size: 0.9rem; color: #64748B;"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <!-- PROGRAM DETAILS MODAL -->
+    <div id="program-modal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title" style="color: var(--navy-dark); font-size: 2.2rem; margin-bottom: 0.5rem;"></h2>
+            <p id="modal-subtitle" style="color: var(--accent-gold); font-weight: 700; margin-bottom: 1.5rem;"></p>
+            
+            <div id="modal-memories" class="memory-text" style="display: none;"></div>
+            
+            <div id="modal-videos" style="display: none;">
+                <h3 style="margin-top: 2rem; color: var(--navy-dark);">Videos</h3>
+                <div id="video-list"></div>
+            </div>
+
+            <div id="modal-gallery" style="display: none;">
+                <h3 style="margin-top: 2rem; color: var(--navy-dark);">Photos & Memories</h3>
+                <div class="modal-gallery" id="gallery-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div style="text-align: left;">
+                <h3 style="color: var(--accent-gold); margin-bottom: 0.5rem;">Crest Dreamfield Academy</h3>
+                <p style="font-size: 0.9rem; opacity: 0.8;">Inspiring wonder, one story at a time.</p>
+            </div>
+            <div style="display: flex; gap: 2rem;">
+                <a onclick="switchPage('home')" style="color: white; text-decoration: none; cursor: pointer;">Home</a>
+                <a onclick="switchPage('programs')" style="color: white; text-decoration: none; cursor: pointer;">Programs</a>
+                <a onclick="switchPage('about')" style="color: white; text-decoration: none; cursor: pointer;">About</a>
+            </div>
+        </div>
+        <p style="margin-top: 2rem; font-size: 0.8rem; opacity: 0.5;">&copy; 2026 Crest Dreamfield Academy. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // CONFIGURATION
+        const EXISTING_GAS_API_URL = 'https://script.google.com/macros/s/AKfycbwZPpKmYMTVwBQ3TMB5v7EmEKjDLj4CQ9ZBwU4z6TgZdlop0_gWncqvtMHjwbzC4Mwy/exec';
+        const HOMEPOSTS_GAS_API_URL = 'https://script.google.com/macros/s/AKfycbwqW_prySLhVtF9GhY8UOgh-WqDXvCUXIS4BH-Gk7WUYtHfxBSmWvseTrBbZSiREkzmDw/exec';
+        const DEBUG_PORTAL = true;
+
+        function portalLog(message, details) {
+            if (DEBUG_PORTAL) console.log(`[Student Portal] ${message}`, details ?? '');
+        }
+        function portalWarn(message, details) {
+            console.warn(`[Student Portal] ${message}`, details ?? '');
+        }
+        function showLoginError(message) {
+            const errorMsg = document.getElementById('login-error');
+            errorMsg.textContent = message;
+            errorMsg.style.display = 'block';
+        }
+        function apiUrl(action, params = {}) {
+            const url = new URL(action === 'getHomePosts' ? HOMEPOSTS_GAS_API_URL : EXISTING_GAS_API_URL);
+            url.searchParams.set('action', action);
+            Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
+            return url.toString();
+        }
+        async function fetchJson(action, params = {}) {
+            const url = apiUrl(action, params);
+            portalLog(`GET ${action}`, { url: url.replace(/password=[^&]+/i, 'password=[redacted]') });
+            const response = await fetch(url, { method: 'GET', mode: 'cors', cache: 'no-store' });
+            const raw = await response.text();
+            portalLog(`Response ${action}`, { status: response.status, body: raw.slice(0, 500) });
+            if (!response.ok) throw new Error(`API returned HTTP ${response.status}`);
+            let data;
+            try { data = JSON.parse(raw); } catch (_) { throw new Error('The Apps Script did not return valid JSON. Check deployment output and doGet().'); }
+            if (!data || typeof data !== 'object') throw new Error('The API returned an unexpected response shape.');
+            return data;
+        }
+
+        // HOME POSTS CMS LOGIC
+        function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+        function normalizeVideoEmbed(v){const r=String(v||'').trim();if(!r)return'';const y=r.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/i);if(y)return`https://www.youtube-nocookie.com/embed/${y[1]}`;const d=extractDriveId(r)||(/^[A-Za-z0-9_-]{20,}$/.test(r)?r:'');return d?`https://drive.google.com/file/d/${d}/preview`:r;}
+        function renderHomePosts(posts){const st=document.getElementById('home-posts-status'),g=document.getElementById('home-posts-grid');if(!st||!g)return;g.innerHTML='';const a=(Array.isArray(posts)?posts:[]).filter(x=>String(x.Status||'').toLowerCase()==='published').sort((x,y)=>Number(x.Order||0)-Number(y.Order||0));if(!a.length){st.textContent='More adventures coming soon!';st.className='home-post-empty';return;}st.remove();a.forEach(p=>{const t=String(p.Type||'Announcement'),c=document.createElement('article');c.className='home-post-card '+(t.toLowerCase()==='featured'?'featured':'');const im=normalizeJournalImage(p.ImageURL||p.Image||p.PosterURL),vi=normalizeVideoEmbed(p.VideoURL||p.Video);if(im||vi){const w=document.createElement('div');w.className='home-post-media';if(vi&&(t.toLowerCase()==='video'||!im)){const f=document.createElement('iframe');f.src=vi;f.title=p.Title||'Academy video';f.loading='lazy';f.allow='autoplay; encrypted-media; picture-in-picture';f.allowFullscreen=true;w.appendChild(f);}else{const i=document.createElement('img');i.src=im;i.alt=p.Title||'Academy post';i.loading='lazy';w.appendChild(i);}c.appendChild(w);}const b=document.createElement('div');b.className='home-post-card-body';b.innerHTML=`<div class="home-post-type">${escapeHtml(t)}</div><div class="home-post-date">${escapeHtml(p.Date||'')}</div><h3>${escapeHtml(p.Title||'')}</h3><p>${escapeHtml(p.Text||p.Description||'')}</p>`;if(p.ButtonText&&p.ButtonURL){const d=document.createElement('div');d.className='home-post-card-actions';d.innerHTML=`<a class="btn-gold" href="${escapeHtml(p.ButtonURL)}" target="_blank" rel="noopener noreferrer">${escapeHtml(p.ButtonText)}</a>`;b.appendChild(d);}c.appendChild(b);g.appendChild(c);});}
+        async function loadHomePosts(){try{const d=await fetchJson('getHomePosts');renderHomePosts(d.posts||[]);}catch(e){console.error('Failed to load HomePosts:',e);const s=document.getElementById('home-posts-status');if(s){s.className='home-post-empty';s.textContent='More adventures coming soon!';}}}
+
+        // PAGE SWITCHING LOGIC
+        function switchPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active-page'));
+            const target = document.getElementById(pageId);
+            if (target) { target.classList.add('active-page'); window.scrollTo(0, 0); }
+            document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+            const navLink = document.getElementById('nav-' + pageId);
+            if (navLink) navLink.classList.add('active');
+        }
+
+        // TYPEWRITER EFFECT
+        const typewriter = document.getElementById('typewriter');
+        const phrases = ["I wonder what adventure we'll have today...", "Every child is a story waiting to be told.", "Let's explore the world together!", "Imagination is the beginning of everything."];
+        let phraseIdx = 0, charIdx = 0, isDeleting = false;
+        function type() {
+            const currentPhrase = phrases[phraseIdx];
+            typewriter.textContent = isDeleting ? currentPhrase.substring(0, charIdx - 1) : currentPhrase.substring(0, charIdx + 1);
+            isDeleting ? charIdx-- : charIdx++;
+            let typeSpeed = isDeleting ? 50 : 100;
+            if (!isDeleting && charIdx === currentPhrase.length) { isDeleting = true; typeSpeed = 2000; }
+            else if (isDeleting && charIdx === 0) { isDeleting = false; phraseIdx = (phraseIdx + 1) % phrases.length; typeSpeed = 500; }
+            setTimeout(type, typeSpeed);
+        }
+
+        // FAQ ACCORDION
+        function toggleFaq(element) {
+            const item = element.parentElement, isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        }
+
+        // PORTAL LOGIN LOGIC
+        async function handleLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value;
+            const loginBtn = document.getElementById('login-btn');
+            const errorMsg = document.getElementById('login-error');
+            if (!user || !pass) return showLoginError('Please enter both your username and password.');
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<span class="spinner"></span>Opening Journal...';
+            errorMsg.style.display = 'none';
+            try {
+                const result = await fetchJson('login', { username: user, password: pass });
+                if (result.success === true) {
+                    portalLog('Login accepted', { username: user });
+                    await loadStudentDataFromResult(result, user);
+                    document.getElementById('login-view').style.display = 'none';
+                    document.getElementById('dashboard-view').style.display = 'block';
+                } else {
+                    portalWarn('Login rejected', result);
+                    showLoginError(result.message || 'Invalid credentials. Please try again.');
+                }
+            } catch (error) {
+                console.error('[Student Portal] Login failed:', error);
+                showLoginError(`Unable to connect to the Student Portal. ${error.message}`);
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = 'Open Journal';
+            }
+        }
+
+        function normalizeJournalImage(value) {
+            const raw = String(value || '').trim();
+            if (!raw || raw.startsWith('[')) return '';
+            let decoded = raw;
+            try { decoded = decodeURIComponent(raw); } catch (_) {}
+            const patterns = [
+                /drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i,
+                /drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/i,
+                /drive\.google\.com\/uc\?(?:[^#]*&)?id=([a-zA-Z0-9_-]+)/i,
+                /drive\.usercontent\.google\.com\/download\?(?:[^#]*&)?id=([a-zA-Z0-9_-]+)/i,
+                /[?&]id=([a-zA-Z0-9_-]+)/i
+            ];
+            for (const pattern of patterns) {
+                const match = decoded.match(pattern);
+                if (match) return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1600`;
+            }
+            return /^[a-zA-Z0-9_-]{20,}$/.test(decoded) ? `https://drive.google.com/thumbnail?id=${decoded}&sz=w1600` : raw;
+        }
+
+        function normalizeFieldKey(value) {
+            return String(value || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+        }
+        function fieldValue(record, keys, fallback = '') {
+            const wanted = keys.map(normalizeFieldKey);
+            const actual = Object.keys(record || {});
+            const key = actual.find(name => wanted.includes(normalizeFieldKey(name)));
+            return key ? record[key] : fallback;
+        }
+        function journalTimestamp(value) {
+            const timestamp = Date.parse(String(value || ''));
+            return Number.isNaN(timestamp) ? 0 : timestamp;
+        }
+
+        async function loadStudentDataFromResult(data, username) {
+            if (!data || data.success === false || data.error) throw new Error(data?.message || data?.error || 'Student data was not found.');
+            const profile = data.profile || {};
+            const name = fieldValue(profile, ['Name'], username);
+            document.getElementById('student-welcome-name').textContent = `Welcome back, ${name}!`;
+            const avatarImage = document.getElementById('student-avatar-image');
+            const avatarChar = document.getElementById('student-avatar-char');
+            const avatarUrl = normalizeJournalImage(fieldValue(profile, ['Avatar', 'Avatar URL', 'Profile Image']));
+            avatarChar.textContent = name.charAt(0).toUpperCase();
+            avatarChar.hidden = Boolean(avatarUrl);
+            avatarImage.hidden = !avatarUrl;
+            avatarImage.alt = `${name} profile picture`;
+            avatarImage.src = avatarUrl || '';
+            avatarImage.onerror = () => {
+                avatarImage.hidden = true;
+                avatarChar.hidden = false;
+                avatarImage.removeAttribute('src');
+            };
+            document.getElementById('student-program-level').textContent = fieldValue(profile, ['Program'], 'Little Dreamer');
+            const attendance = fieldValue(profile, ['Attendance']);
+            document.getElementById('attendance-stats').textContent = attendance !== '' ? `${attendance}% Attendance` : 'Attendance available soon';
+            document.getElementById('attendance-sessions').textContent = fieldValue(profile, ['Sessions']);
+            const badgeContainer = document.getElementById('badge-list');
+            badgeContainer.innerHTML = '';
+            String(fieldValue(profile, ['Badges'])).split(',').map(b => b.trim()).filter(Boolean).forEach(badge => {
+                const span = document.createElement('span'); span.className = 'badge-item'; span.textContent = badge; badgeContainer.appendChild(span);
+            });
+
+            const journalFeed = document.getElementById('journal-feed');
+            journalFeed.innerHTML = '<h3 style="margin-bottom: 1rem; color: var(--navy-dark);">My Adventure Journal</h3>';
+            const journal = (Array.isArray(data.journal) ? data.journal : []).slice().sort((a, b) => {
+                const aDate = fieldValue(a, ['Date', 'Entry Date']);
+                const bDate = fieldValue(b, ['Date', 'Entry Date']);
+                return journalTimestamp(aDate) - journalTimestamp(bDate);
+            });
+            if (!journal.length) {
+                journalFeed.innerHTML += '<p style="color: #64748B;">No adventure entries yet. Start your journey today!</p>';
+            }
+
+            journal.forEach(entry => {
+                const card = document.createElement('div'); card.className = 'journal-card';
+                const date = String(fieldValue(entry, ['Date', 'Entry Date'])).toUpperCase();
+                const title = fieldValue(entry, ['Title', 'Entry Title', 'Activity']);
+                const summary = fieldValue(entry, ['Image Summary', 'Summary', 'Description', 'Entry', 'Notes']);
+                const teacher = fieldValue(entry, ['Teacher', 'Teacher Name'], 'Teacher');
+                const feedback = fieldValue(entry, ['Feedback', 'Teacher Feedback', 'Teacher Comment', 'Comments']);
+                const image = normalizeJournalImage(fieldValue(entry, ['Image', 'Image URL', 'Photo URL', 'Photo', 'Uploaded Photo', 'Activity Photo', 'Image Label']));
+
+                if (date || title) {
+                    const meta = document.createElement('p');
+                    meta.style.cssText = 'font-size: 0.8rem; color: #64748B; font-weight: 700;';
+                    meta.textContent = [date, title].filter(Boolean).join(' · ');
+                    card.appendChild(meta);
+                }
+
+                const imageFrame = document.createElement('div');
+                imageFrame.className = 'journal-img-frame';
+                if (image) {
+                    const imageEl = document.createElement('img');
+                    imageEl.src = image;
+                    imageEl.alt = title ? `Activity photo for ${title}` : 'Activity photo';
+                    imageEl.loading = 'lazy';
+                    imageEl.onerror = () => { imageFrame.innerHTML = '<span>[ Activity Photo Unavailable ]</span>'; };
+                    imageFrame.appendChild(imageEl);
+                } else {
+                    imageFrame.innerHTML = '<span>[ Activity Photo ]</span>';
+                }
+                card.appendChild(imageFrame);
+
+                const summaryEl = document.createElement('p');
+                summaryEl.style.cssText = 'margin: 0.25rem 0 0; color: var(--text-dark);';
+                summaryEl.textContent = summary;
+                card.appendChild(summaryEl);
+
+                if (feedback) {
+                    const feedbackBox = document.createElement('div');
+                    feedbackBox.className = 'feedback-box';
+                    const strong = document.createElement('strong');
+                    strong.textContent = `${teacher} says:`;
+                    const feedbackText = document.createElement('span');
+                    feedbackText.textContent = ` “${feedback}”`;
+                    feedbackBox.append(strong, feedbackText);
+                    card.appendChild(feedbackBox);
+                }
+                journalFeed.appendChild(card);
+            });
+            portalLog('Student dashboard loaded', { username, journalEntries: journal.length });
+        }
+
+        function handleLogout() {
+            document.getElementById('login-view').style.display = 'block';
+            document.getElementById('dashboard-view').style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('login-error').style.display = 'none';
+            portalLog('Logged out');
+        }
+
+        // WEBSITE CONTENT CMS LOGIC
+        let websiteData = { programs: [], aboutUs: [] };
+
+        async function loadWebsiteData() {
+            try {
+                const data = await fetchJson('getWebsiteData');
+                if (data.success) {
+                    websiteData = data;
+                    renderPrograms(data.programs);
+                    renderAboutUs(data.aboutUs);
+                }
+            } catch (error) {
+                console.error('Failed to load website data:', error);
+                document.getElementById('programs-container').innerHTML = '<p style="text-align: center; grid-column: 1/-1;">Welcome! Programs are currently being updated.</p>';
+            }
+        }
+
+        function renderPrograms(programs) {
+            const container = document.getElementById('programs-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            programs.forEach(prog => {
+                const hasContent = (String(prog.GalleryURLs || '').trim() || String(prog.VideoURLs || '').trim() || String(prog.Memories || '').trim());
+                const card = document.createElement('div');
+                card.className = `storybook-card ${hasContent ? 'clickable-card' : 'locked-card'}`;
+                if (hasContent) {
+                    card.onclick = () => openProgramModal(prog.ID || prog.Title);
+                }
+
+                card.innerHTML = `
+                    <div class="program-poster-frame">
+                        <img src="${normalizeJournalImage(prog.PosterURL)}" alt="${prog.Title} Poster" onerror="this.src='https://via.placeholder.com/400x600?text=No+Image'">
+                    </div>
+                    <h3 style="color: var(--navy-dark); font-size: 1.4rem; margin-bottom: 0.5rem;">${prog.Title}</h3>
+                    <p><strong>Focus:</strong> ${prog.AgeOrFocus}</p>
+                    <p style="margin-top: 0.5rem;">${prog.Description}</p>
+                    ${hasContent ? '<p style="margin-top: 1rem; color: var(--accent-blue); font-weight: 700;">Click to see memories &rarr;</p>' : ''}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderAboutUs(aboutUs) {
+            const containers = {
+                'Founders': document.getElementById('founders-container'),
+                'Teachers': document.getElementById('teachers-container'),
+                'Staff': document.getElementById('staff-container')
+            };
+            const sections = {
+                'Founders': document.getElementById('founders-section'),
+                'Teachers': document.getElementById('teachers-section'),
+                'Staff': document.getElementById('staff-section')
+            };
+
+            // Clear containers
+            Object.values(containers).forEach(c => { if(c) c.innerHTML = ''; });
+            if (document.getElementById('about-loading')) document.getElementById('about-loading').style.display = 'none';
+
+            aboutUs.forEach(person => {
+                const cat = person.Category || (/co-founder/i.test(String(person.Role || '')) ? 'Founders' : 'Staff');
+                const container = containers[cat];
+                if (container) {
+                    sections[cat].style.display = 'block';
+                    const card = document.createElement('div');
+                    card.className = 'photo-frame-card';
+                    card.innerHTML = `
+                        <div class="image-placeholder-frame">
+                            <img src="${normalizeJournalImage(person.PhotoURL)}" alt="${person.Name}" onerror="this.style.display='none'">
+                            <span>[ ${person.Name} Photo ]</span>
+                        </div>
+                        <h3 style="color: var(--navy-dark);">${person.Name}</h3>
+                        <p style="font-size: 0.9rem; color: #64748B;">${person.Role}</p>
+                    `;
+                    container.appendChild(card);
+                }
+            });
+        }
+
+        function openProgramModal(progId) {
+            const prog = websiteData.programs.find(p => (p.ID || p.Title) === progId);
+            if (!prog) return;
+
+            document.getElementById('modal-title').textContent = prog.Title;
+            document.getElementById('modal-subtitle').textContent = prog.AgeOrFocus;
+            
+            // Memories
+            const memEl = document.getElementById('modal-memories');
+            if (prog.Memories) {
+                memEl.textContent = prog.Memories;
+                memEl.style.display = 'block';
+            } else {
+                memEl.style.display = 'none';
+            }
+
+            // Videos
+            const videoSection = document.getElementById('modal-videos');
+            const videoList = document.getElementById('video-list');
+            videoList.innerHTML = '';
+            if (prog.VideoURLs) {
+                const videos = String(prog.VideoURLs).split(',').map(v => v.trim()).filter(Boolean);
+                videos.forEach(url => {
+                    const videoId = extractDriveId(url);
+                    if (videoId) {
+                        const div = document.createElement('div');
+                        div.className = 'video-container';
+                        div.innerHTML = `<iframe width="100%" height="400" src="https://drive.google.com/file/d/${videoId}/preview" frameborder="0" allow="autoplay"></iframe>`;
+                        videoList.appendChild(div);
+                    }
+                });
+                videoSection.style.display = videos.length ? 'block' : 'none';
+            } else {
+                videoSection.style.display = 'none';
+            }
+
+            // Gallery
+            const gallerySection = document.getElementById('modal-gallery');
+            const galleryList = document.getElementById('gallery-list');
+            galleryList.innerHTML = '';
+            if (prog.GalleryURLs) {
+                const photos = String(prog.GalleryURLs).split(',').map(p => p.trim()).filter(Boolean);
+                photos.forEach(url => {
+                    const img = document.createElement('img');
+                    img.className = 'gallery-item';
+                    img.src = normalizeJournalImage(url);
+                    img.onclick = () => window.open(url, '_blank');
+                    galleryList.appendChild(img);
+                });
+                gallerySection.style.display = photos.length ? 'block' : 'none';
+            } else {
+                gallerySection.style.display = 'none';
+            }
+
+            document.getElementById('program-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(e) {
+            document.getElementById('program-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('video-list').innerHTML = '';
+        }
+
+        function extractDriveId(url) {
+            const patterns = [
+                /drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i,
+                /drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/i,
+                /drive\.google\.com\/uc\?(?:[^#]*&)?id=([a-zA-Z0-9_-]+)/i,
+                /[?&]id=([a-zA-Z0-9_-]+)/i
+            ];
+            for (const pattern of patterns) {
+                const match = String(url).match(pattern);
+                if (match) return match[1];
+            }
+            return null;
+        }
+
+        window.onload = () => {
+            type();
+            loadWebsiteData();
+            loadHomePosts();
+        };
+    </script>
+</body>
+</html>
