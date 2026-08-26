@@ -175,6 +175,10 @@
             .footer-content > div:first-child { text-align: center !important; }
             footer { padding-left: 1rem; padding-right: 1rem; }
             .modal-overlay { padding: .75rem; }
+            .video-list { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+            .video-container { margin-top: 0; border-radius: 10px; flex: 0 0 auto; }
+            .video-container iframe { height: auto !important; min-height: 0; aspect-ratio: 16 / 9; }
+            .video-container video { height: auto; max-height: none; aspect-ratio: 16 / 9; object-fit: contain; }
         }
 
         /* SECTIONS GENERAL */
@@ -784,6 +788,15 @@
             border-radius: 8px;
             overflow: hidden;
             background: #000;
+            isolation: isolate;
+        }
+
+        .video-container iframe {
+            display: block;
+            width: 100%;
+            height: 400px;
+            max-width: 100%;
+            border: 0;
         }
 
         .video-container video { width: 100%; display: block; }
@@ -1434,15 +1447,45 @@
             const videoList = document.getElementById('video-list');
             videoList.innerHTML = '';
             if (prog.VideoURLs) {
-                const videos = String(prog.VideoURLs).split(',').map(v => v.trim()).filter(Boolean);
+                const videos = splitMediaValues(prog.VideoURLs);
                 videos.forEach(url => {
-                    const videoId = extractDriveId(url);
-                    if (videoId) {
-                        const div = document.createElement('div');
-                        div.className = 'video-container';
-                        div.innerHTML = `<iframe width="100%" height="400" src="https://drive.google.com/file/d/${videoId}/preview" frameborder="0" allow="autoplay"></iframe>`;
-                        videoList.appendChild(div);
+                    const div = document.createElement('div');
+                    div.className = 'video-container';
+                    const driveId = extractDriveId(url);
+                    const youtubeUrl = normalizeYouTubeEmbed(url);
+                    if (driveId) {
+                        const frame = document.createElement('iframe');
+                        frame.src = `https://drive.google.com/file/d/${driveId}/preview`;
+                        frame.title = `${prog.Title || 'Program'} video`;
+                        frame.loading = 'lazy';
+                        frame.allow = 'autoplay; fullscreen; picture-in-picture';
+                        frame.allowFullscreen = true;
+                        div.appendChild(frame);
+                    } else if (youtubeUrl) {
+                        const frame = document.createElement('iframe');
+                        frame.src = youtubeUrl;
+                        frame.title = `${prog.Title || 'Program'} video`;
+                        frame.loading = 'lazy';
+                        frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+                        frame.allowFullscreen = true;
+                        div.appendChild(frame);
+                    } else if (/\.(mp4|webm|ogg)(?:[?#].*)?$/i.test(url)) {
+                        const player = document.createElement('video');
+                        player.src = url;
+                        player.controls = true;
+                        player.playsInline = true;
+                        player.preload = 'metadata';
+                        div.appendChild(player);
+                    } else {
+                        const frame = document.createElement('iframe');
+                        frame.src = url;
+                        frame.title = `${prog.Title || 'Program'} video`;
+                        frame.loading = 'lazy';
+                        frame.allow = 'autoplay; fullscreen; picture-in-picture';
+                        frame.allowFullscreen = true;
+                        div.appendChild(frame);
                     }
+                    videoList.appendChild(div);
                 });
                 videoSection.style.display = videos.length ? 'block' : 'none';
             } else {
@@ -1477,18 +1520,30 @@
             document.getElementById('video-list').innerHTML = '';
         }
 
+        function splitMediaValues(value) {
+            return String(value || '').split(/[\n,;|]+/).map(v => v.trim()).filter(Boolean);
+        }
+
+        function normalizeYouTubeEmbed(value) {
+            const raw = String(value || '').trim();
+            const match = raw.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/i);
+            return match ? `https://www.youtube-nocookie.com/embed/${match[1]}` : '';
+        }
+
         function extractDriveId(url) {
+            const raw = String(url || '').trim();
             const patterns = [
-                /drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i,
-                /drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/i,
-                /drive\.google\.com\/uc\?(?:[^#]*&)?id=([a-zA-Z0-9_-]+)/i,
-                /[?&]id=([a-zA-Z0-9_-]+)/i
+                /(?:drive|docs)\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i,
+                /(?:drive|docs)\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/i,
+                /(?:drive|docs)\.google\.com\/uc\?(?:[^#]*&)?id=([a-zA-Z0-9_-]+)/i,
+                /drive\.usercontent\.google\.com\/download\?(?:[^#]*&)?id=([a-zA-Z0-9_-]+)/i,
+                /[?&]id=([a-zA-Z0-9_-]{20,})/i
             ];
             for (const pattern of patterns) {
-                const match = String(url).match(pattern);
+                const match = raw.match(pattern);
                 if (match) return match[1];
             }
-            return null;
+            return /^[a-zA-Z0-9_-]{20,}$/.test(raw) ? raw : null;
         }
 
         window.onload = () => {
