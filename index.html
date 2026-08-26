@@ -177,7 +177,7 @@
             .modal-overlay { padding: .75rem; }
             .video-list { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
             .video-container { margin-top: 0; border-radius: 10px; flex: 0 0 auto; }
-            .video-container iframe { width: 100%; height: min(56.25vw, 220px) !important; min-height: 0; aspect-ratio: 16 / 9; }
+            .video-container iframe { height: auto !important; min-height: 0; aspect-ratio: 16 / 9; }
             .video-container video { height: auto; max-height: none; aspect-ratio: 16 / 9; object-fit: contain; }
         }
 
@@ -1371,7 +1371,7 @@
             container.innerHTML = '';
 
             programs.forEach(prog => {
-                const hasContent = (String(fieldValue(prog, ['GalleryURLs', 'GalleryURL', 'Gallery', 'Photos']) || '').trim() || String(fieldValue(prog, ['VideoURLs', 'VideoURL', 'Videos', 'Video']) || '').trim() || String(prog.Memories || '').trim());
+                const hasContent = (String(prog.GalleryURLs || '').trim() || String(prog.VideoURLs || '').trim() || String(prog.Memories || '').trim());
                 const card = document.createElement('div');
                 card.className = `storybook-card ${hasContent ? 'clickable-card' : 'locked-card'}`;
                 if (hasContent) {
@@ -1446,27 +1446,48 @@
             const videoSection = document.getElementById('modal-videos');
             const videoList = document.getElementById('video-list');
             videoList.innerHTML = '';
-            const videoValue = fieldValue(prog, ['VideoURLs', 'VideoURL', 'Videos', 'Video']);
-            if (videoValue) {
-                const videos = splitMediaValues(videoValue);
-                let renderedVideoCount = 0;
+            if (prog.VideoURLs) {
+                const videos = splitMediaValues(prog.VideoURLs);
                 videos.forEach(url => {
-                    const driveId = extractDriveId(url);
-                    if (!driveId) return;
                     const div = document.createElement('div');
                     div.className = 'video-container';
-                    const frame = document.createElement('iframe');
-                    frame.src = `https://drive.google.com/file/d/${driveId}/preview?rm=minimal`;
-                    frame.title = `${prog.Title || 'Program'} video`;
-                    frame.loading = 'lazy';
-                    frame.allow = 'autoplay; fullscreen; picture-in-picture';
-                    frame.allowFullscreen = true;
-                    frame.setAttribute('playsinline', '');
-                    div.appendChild(frame);
+                    const driveId = extractDriveId(url);
+                    const youtubeUrl = normalizeYouTubeEmbed(url);
+                    if (driveId) {
+                        const frame = document.createElement('iframe');
+                        frame.src = `https://drive.google.com/file/d/${driveId}/preview`;
+                        frame.title = `${prog.Title || 'Program'} video`;
+                        frame.loading = 'lazy';
+                        frame.allow = 'autoplay; fullscreen; picture-in-picture';
+                        frame.allowFullscreen = true;
+                        div.appendChild(frame);
+                    } else if (youtubeUrl) {
+                        const frame = document.createElement('iframe');
+                        frame.src = youtubeUrl;
+                        frame.title = `${prog.Title || 'Program'} video`;
+                        frame.loading = 'lazy';
+                        frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+                        frame.allowFullscreen = true;
+                        div.appendChild(frame);
+                    } else if (/\.(mp4|webm|ogg)(?:[?#].*)?$/i.test(url)) {
+                        const player = document.createElement('video');
+                        player.src = url;
+                        player.controls = true;
+                        player.playsInline = true;
+                        player.preload = 'metadata';
+                        div.appendChild(player);
+                    } else {
+                        const frame = document.createElement('iframe');
+                        frame.src = url;
+                        frame.title = `${prog.Title || 'Program'} video`;
+                        frame.loading = 'lazy';
+                        frame.allow = 'autoplay; fullscreen; picture-in-picture';
+                        frame.allowFullscreen = true;
+                        div.appendChild(frame);
+                    }
                     videoList.appendChild(div);
-                    renderedVideoCount += 1;
                 });
-                videoSection.style.display = renderedVideoCount ? 'block' : 'none';
+                videoSection.style.display = videos.length ? 'block' : 'none';
             } else {
                 videoSection.style.display = 'none';
             }
@@ -1475,9 +1496,8 @@
             const gallerySection = document.getElementById('modal-gallery');
             const galleryList = document.getElementById('gallery-list');
             galleryList.innerHTML = '';
-            const galleryValue = fieldValue(prog, ['GalleryURLs', 'GalleryURL', 'Gallery', 'Photos']);
-            if (galleryValue) {
-                const photos = splitMediaValues(galleryValue);
+            if (prog.GalleryURLs) {
+                const photos = String(prog.GalleryURLs).split(',').map(p => p.trim()).filter(Boolean);
                 photos.forEach(url => {
                     const img = document.createElement('img');
                     img.className = 'gallery-item';
@@ -1506,9 +1526,8 @@
 
         function normalizeYouTubeEmbed(value) {
             const raw = String(value || '').trim();
-            const match = raw.match(/(?:https?:\/\/)?(?:www\.|m\.)?(?:youtube\.com\/(?:watch\?(?:[^#]*&)?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/i);
-            if (match) return `https://www.youtube-nocookie.com/embed/${match[1]}?rel=0&playsinline=1`;
-            return /^[A-Za-z0-9_-]{11}$/.test(raw) ? `https://www.youtube-nocookie.com/embed/${raw}?rel=0&playsinline=1` : '';
+            const match = raw.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/i);
+            return match ? `https://www.youtube-nocookie.com/embed/${match[1]}` : '';
         }
 
         function extractDriveId(url) {
