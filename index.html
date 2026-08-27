@@ -179,6 +179,11 @@
             .video-container { position: relative; width: 100%; height: auto; aspect-ratio: 16 / 9; margin-top: 0; border-radius: 10px; flex: 0 0 auto; overflow: hidden; }
             .video-container iframe { position: absolute; inset: 0; display: block; width: 100% !important; height: 100% !important; min-height: 0; max-width: 100%; border: 0; }
             .video-container video { display: block; width: 100%; height: 100%; max-height: none; aspect-ratio: 16 / 9; object-fit: contain; }
+            .video-fullscreen-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 46px; margin-top: .65rem; padding: .7rem 1.15rem; border: 1px solid rgba(255,255,255,.35); border-radius: 999px; background: linear-gradient(135deg, var(--accent-gold), #F7C85B); color: var(--navy-dark); box-shadow: 0 6px 16px rgba(10,25,47,.2); font: inherit; font-size: .92rem; font-weight: 800; letter-spacing: .01em; cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, filter .18s ease; }
+            .video-fullscreen-btn::before { content: '⛶'; font-size: 1.15rem; line-height: 1; }
+            .video-fullscreen-btn:hover { filter: brightness(1.04); transform: translateY(-2px); box-shadow: 0 9px 20px rgba(10,25,47,.28); }
+            .video-fullscreen-btn:active { transform: scale(.97); }
+            .video-fullscreen-btn:focus-visible { outline: 3px solid rgba(52,152,219,.55); outline-offset: 3px; }
         }
 
         /* SECTIONS GENERAL */
@@ -1469,6 +1474,18 @@
                     frame.allow = 'autoplay; fullscreen; picture-in-picture';
                     frame.allowFullscreen = true;
                     div.appendChild(frame);
+                    const fullscreenButton = document.createElement('button');
+                    fullscreenButton.type = 'button';
+                    fullscreenButton.className = 'video-fullscreen-btn';
+                    fullscreenButton.textContent = 'View full screen';
+                    fullscreenButton.setAttribute('aria-label', `View ${prog.Title || 'program'} video full screen`);
+                    fullscreenButton.addEventListener('click', event => {
+                        event.stopPropagation();
+                        if (frame.requestFullscreen) frame.requestFullscreen();
+                        else if (frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
+                        else window.open(frame.src, '_blank', 'noopener');
+                    });
+                    div.appendChild(fullscreenButton);
                     videoList.appendChild(div);
                     renderedVideoCount += 1;
                 });
