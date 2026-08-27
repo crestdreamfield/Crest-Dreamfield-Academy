@@ -176,8 +176,9 @@
             footer { padding-left: 1rem; padding-right: 1rem; }
             .modal-overlay { padding: .75rem; }
             .video-list { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
-            .video-container { position: relative; width: 100%; height: auto; aspect-ratio: 16 / 9; margin-top: 0; border-radius: 10px; flex: 0 0 auto; overflow: hidden; }
-            .video-container iframe { position: absolute; inset: 0; display: block; width: 100% !important; height: 100% !important; min-height: 0; max-width: 100%; border: 0; }
+            .video-container { width: 100%; height: auto; margin-top: 0; border-radius: 10px; flex: 0 0 auto; overflow: visible; }
+            .video-frame-shell { position: relative; width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: #000; }
+            .video-frame-shell iframe { position: absolute; inset: 0; display: block; width: 100% !important; height: 100% !important; min-height: 0; max-width: 100%; border: 0; }
             .video-container video { display: block; width: 100%; height: 100%; max-height: none; aspect-ratio: 16 / 9; object-fit: contain; }
             .video-fullscreen-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 46px; margin-top: .65rem; padding: .7rem 1.15rem; border: 1px solid rgba(255,255,255,.35); border-radius: 999px; background: linear-gradient(135deg, var(--accent-gold), #F7C85B); color: var(--navy-dark); box-shadow: 0 6px 16px rgba(10,25,47,.2); font: inherit; font-size: .92rem; font-weight: 800; letter-spacing: .01em; cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, filter .18s ease; }
             .video-fullscreen-btn::before { content: '⛶'; font-size: 1.15rem; line-height: 1; }
@@ -791,15 +792,23 @@
             width: 100%;
             margin-top: 1.5rem;
             border-radius: 8px;
-            overflow: hidden;
-            background: #000;
+            overflow: visible;
             isolation: isolate;
         }
 
-        .video-container iframe {
-            display: block;
+        .video-frame-shell {
+            position: relative;
             width: 100%;
             height: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .video-frame-shell iframe {
+            display: block;
+            width: 100%;
+            height: 100%;
             max-width: 100%;
             border: 0;
         }
@@ -1473,7 +1482,10 @@
                     frame.loading = 'lazy';
                     frame.allow = 'autoplay; fullscreen; picture-in-picture';
                     frame.allowFullscreen = true;
-                    div.appendChild(frame);
+                    const frameShell = document.createElement('div');
+                    frameShell.className = 'video-frame-shell';
+                    frameShell.appendChild(frame);
+                    div.appendChild(frameShell);
                     const fullscreenButton = document.createElement('button');
                     fullscreenButton.type = 'button';
                     fullscreenButton.className = 'video-fullscreen-btn';
