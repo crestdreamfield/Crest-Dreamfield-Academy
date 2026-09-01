@@ -1246,19 +1246,55 @@ At CREST, children are invited to explore, imagine, and grow through storybook-i
             const raw = String(value || '').trim();
             if (!raw || raw.startsWith('[') || /^\[?\s*[^\]]+\s+photo\s*\]?$/i.test(raw)) return '';
             let decoded = raw;
-            try { decoded = decodeURIComponent(raw); } catch (_) {}
+            const formulaUrl = raw.match(/(?:IMAGE|HYPERLINK)\s*\(\s*["']([^"']+)["']/i);
+            if (formulaUrl) decoded = formulaUrl[1];
+            try { decoded = decodeURIComponent(decoded); } catch (_) {}
             const patterns = [
-                /drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i,
-                /drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/i,
-                /drive\.google\.com\/uc\?(?:[^#]*&)?id=([a-zA-Z0-9_-]+)/i,
+                /(?:drive|docs)\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i,
+                /(?:drive|docs)\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/i,
+                /(?:drive|docs)\.google\.com\/uc\?(?:[^#]*&)?id=([a-zA-Z0-9_-]+)/i,
+                /(?:drive|docs)\.google\.com\/thumbnail\?(?:[^#]*&)?id=([a-zA-Z0-9_-]+)/i,
                 /drive\.usercontent\.google\.com\/download\?(?:[^#]*&)?id=([a-zA-Z0-9_-]+)/i,
-                /[?&]id=([a-zA-Z0-9_-]+)/i
+                /[?&]id=([a-zA-Z0-9_-]{20,})/i
             ];
             for (const pattern of patterns) {
                 const match = decoded.match(pattern);
                 if (match) return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1600`;
             }
-            return /^[a-zA-Z0-9_-]{20,}$/.test(decoded) ? `https://drive.google.com/thumbnail?id=${decoded}&sz=w1600` : raw;
+            if (/^(?:https?:)?\/\//i.test(decoded)) return decoded;
+            return /^[a-zA-Z0-9_-]{20,}$/.test(decoded) ? `https://drive.google.com/thumbnail?id=${decoded}&sz=w1600` : '';
+        }
+
+        function calculateAttendance(profile, data) {
+            const raw = fieldValue(profile, ['Attendance', 'Attendance %', 'Attendance Percentage', 'Attendance Rate', 'Attendance Record']);
+            const text = String(raw ?? '').trim();
+            const percent = text.match(/(\d+(?:\.\d+)?)\s*%/);
+            if (percent) return Number(Number(percent[1]).toFixed(2));
+            const fraction = text.match(/(\d+(?:\.\d+)?)\s*(?:\/|out of|of)\s*(\d+(?:\.\d+)?)/i);
+            if (fraction && Number(fraction[2]) > 0) return Number((Number(fraction[1]) / Number(fraction[2]) * 100).toFixed(2));
+            const numericField = (record, keys) => { const value = String(fieldValue(record, keys, '')).trim(); if (!value) return null; const number = Number(value.replace(/,/g, '')); return Number.isFinite(number) ? number : null; };
+            const present = numericField(profile, ['Present', 'Attended', 'Days Present', 'Present Sessions', 'Sessions Attended']);
+            const total = numericField(profile, ['Total', 'Total Sessions', 'Sessions Total', 'Total Attendance', 'Days Scheduled', 'Scheduled Sessions']);
+            const rawNumeric = text && !text.includes('%') ? Number(text.replace(/,/g, '')) : null;
+            if (total !== null && total > 0 && rawNumeric !== null && Number.isFinite(rawNumeric) && rawNumeric >= 0 && rawNumeric <= total) return Number((rawNumeric / total * 100).toFixed(2));
+            if (present !== null && total !== null && total > 0) return Number((present / total * 100).toFixed(2));
+            const summary = data?.attendance && !Array.isArray(data.attendance) ? data.attendance : data?.attendanceSummary;
+            if (summary && typeof summary === 'object') {
+                const summaryValue = keys => { const value = String(fieldValue(summary, keys, '')).trim(); if (!value) return null; const number = Number(value.replace(/,/g, '')); return Number.isFinite(number) ? number : null; };
+                const summaryPresent = summaryValue(['Present', 'Attended', 'Days Present', 'Present Sessions']);
+                const summaryTotal = summaryValue(['Total', 'Total Sessions', 'Sessions Total', 'Days Scheduled']);
+                if (summaryPresent !== null && summaryTotal !== null && summaryTotal > 0) return Number((summaryPresent / summaryTotal * 100).toFixed(2));
+            }
+            const records = Array.isArray(data?.attendance) ? data.attendance : Array.isArray(data?.attendanceRecords) ? data.attendanceRecords : [];
+            if (records.length) {
+                const attended = records.filter(record => {
+                    const status = typeof record === 'object' ? fieldValue(record, ['Status', 'Attendance', 'Present', 'Attended', 'Value']) : record;
+                    return /^(present|p|attended|yes|true|1)$/i.test(String(status).trim());
+                }).length;
+                return Number((attended / records.length * 100).toFixed(2));
+            }
+            const numeric = Number(text);
+            return Number.isFinite(numeric) && numeric >= 0 && numeric <= 100 ? Number(numeric.toFixed(2)) : null;
         }
 
         function normalizeFieldKey(value) {
@@ -1277,12 +1313,12 @@ At CREST, children are invited to explore, imagine, and grow through storybook-i
 
         async function loadStudentDataFromResult(data, username) {
             if (!data || data.success === false || data.error) throw new Error(data?.message || data?.error || 'Student data was not found.');
-            const profile = data.profile || {};
-            const name = fieldValue(profile, ['Name'], username);
+            const profile = data.profile || data.student || data.studentProfile || {};
+            const name = fieldValue(profile, ['Name', 'Student Name', 'Full Name'], username);
             document.getElementById('student-welcome-name').textContent = `Welcome back, ${name}!`;
             const avatarImage = document.getElementById('student-avatar-image');
             const avatarChar = document.getElementById('student-avatar-char');
-            const avatarUrl = normalizeJournalImage(fieldValue(profile, ['Avatar', 'Avatar URL', 'Profile Image']));
+            const avatarUrl = normalizeJournalImage(fieldValue(profile, ['Avatar', 'Avatar URL', 'Profile Image', 'Profile Photo', 'Student Photo', 'Photo', 'Photo URL', 'Image', 'Image URL', 'Picture']));
             avatarChar.textContent = name.charAt(0).toUpperCase();
             avatarChar.hidden = Boolean(avatarUrl);
             avatarImage.hidden = !avatarUrl;
@@ -1293,10 +1329,11 @@ At CREST, children are invited to explore, imagine, and grow through storybook-i
                 avatarChar.hidden = false;
                 avatarImage.removeAttribute('src');
             };
-            document.getElementById('student-program-level').textContent = fieldValue(profile, ['Program'], 'Little Dreamer');
-            const attendance = fieldValue(profile, ['Attendance']);
-            document.getElementById('attendance-stats').textContent = attendance !== '' ? `${attendance}% Attendance` : 'Attendance available soon';
-            document.getElementById('attendance-sessions').textContent = fieldValue(profile, ['Sessions']);
+            document.getElementById('student-program-level').textContent = fieldValue(profile, ['Program', 'Program Level', 'Class'], 'Little Dreamer');
+            const attendance = calculateAttendance(profile, data);
+            document.getElementById('attendance-stats').textContent = attendance !== null ? `${attendance}% Attendance` : 'Attendance available soon';
+            const sessions = fieldValue(profile, ['Sessions', 'Total Sessions', 'Attendance Sessions'], '');
+            document.getElementById('attendance-sessions').textContent = sessions || (Array.isArray(data.attendance) ? `${data.attendance.length} attendance records` : '');
             const badgeContainer = document.getElementById('badge-list');
             badgeContainer.innerHTML = '';
             String(fieldValue(profile, ['Badges'])).split(',').map(b => b.trim()).filter(Boolean).forEach(badge => {
@@ -1321,7 +1358,7 @@ At CREST, children are invited to explore, imagine, and grow through storybook-i
                 const summary = fieldValue(entry, ['Image Summary', 'Summary', 'Description', 'Entry', 'Notes']);
                 const teacher = fieldValue(entry, ['Teacher', 'Teacher Name'], 'Teacher');
                 const feedback = fieldValue(entry, ['Feedback', 'Teacher Feedback', 'Teacher Comment', 'Comments']);
-                const image = normalizeJournalImage(fieldValue(entry, ['Image', 'Image URL', 'Photo URL', 'Photo', 'Uploaded Photo', 'Activity Photo']));
+                const image = normalizeJournalImage(fieldValue(entry, ['Image', 'Image URL', 'Image Link', 'Image Label', 'Photo URL', 'Photo Link', 'Photo', 'Uploaded Photo', 'Activity Photo', 'Student Photo', 'Picture']));
 
                 if (date || title) {
                     const meta = document.createElement('p');
